@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Health Risk Prediction | SDG 3</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav class="navbar">
+    <div class="nav-brand">🏥 HealthAI</div>
+    <ul class="nav-links">
+      <li><a href="/" class="active">Home</a></li>
+      <li><a href="/assessment">Assessment</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero Section ── -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="sdg-badge">🌍 SDG 3 — Good Health & Well-Being</div>
+      <h1>AI Health Risk<br><span class="highlight">Prediction System</span></h1>
+      <p class="hero-subtitle">
+        Enter basic health information and let our machine learning model
+        estimate your risk of developing common health conditions.
+        Designed for <strong>education and health awareness</strong>.
+      </p>
+      <a href="/assessment" class="btn btn-primary btn-large">
+        🩺 Check Your Health Risk
+      </a>
+      <p class="disclaimer-mini">
+        ⚠️ For educational purposes only — not a medical diagnosis tool.
+      </p>
+    </div>
+    <div class="hero-illustration">
+      <div class="health-card-preview">
+        <div class="preview-row"><span>🫀 Heart Health</span><span class="badge green">Monitored</span></div>
+        <div class="preview-row"><span>🩸 Glucose</span><span class="badge yellow">Tracked</span></div>
+        <div class="preview-row"><span>🧠 ML Analysis</span><span class="badge blue">Active</span></div>
+        <div class="preview-row"><span>📊 Risk Level</span><span class="badge green">Calculated</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ── -->
+  <section class="section-light">
+    <div class="container">
+      <h2 class="section-title">How It Works</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Enter Health Data</h3>
+          <p>Fill in your age, BMI inputs, blood pressure, glucose, and lifestyle details.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>ML Analysis</h3>
+          <p>Our trained machine learning model analyses your data against learned health patterns.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Get Your Report</h3>
+          <p>Receive your risk level, BMI category, probability score, and health tips.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SDG Section ── -->
+  <section class="section-blue">
+    <div class="container sdg-section">
+      <div class="sdg-icon">🌿</div>
+      <div>
+        <h2>Aligned with UN Sustainable Development Goal 3</h2>
+        <p>
+          <strong>SDG 3 — Good Health and Well-Being</strong> aims to ensure healthy lives and promote
+          well-being for all at all ages. This project supports SDG 3 by raising health awareness,
+          helping people understand their risk factors, and encouraging preventive healthcare.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features Grid ── -->
+  <section class="section-light">
+    <div class="container">
+      <h2 class="section-title">Project Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>Machine Learning</h3>
+          <p>Logistic Regression, Decision Tree, and Random Forest models compared.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Visual Dashboard</h3>
+          <p>Interactive charts for BMI, blood pressure, glucose, and risk probability.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚖️</div>
+          <h3>BMI Calculator</h3>
+          <p>Automatic BMI calculation with category classification.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💡</div>
+          <h3>Health Recommendations</h3>
+          <p>Personalised tips based on your health inputs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="cta-section">
+    <h2>Ready to Check Your Health Risk?</h2>
+    <p>It only takes 2 minutes. No registration needed.</p>
+    <a href="/assessment" class="btn btn-white btn-large">Start Health Assessment →</a>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <p>AI Health Risk Prediction System &nbsp;|&nbsp; SDG 3 — Good Health &amp; Well-Being</p>
+    <p class="footer-disclaimer">
+      This system is for educational and awareness purposes only.
+      It does not provide medical diagnosis or replace professional medical advice.
+    </p>
+  </footer>
+
+</body>
+</html>

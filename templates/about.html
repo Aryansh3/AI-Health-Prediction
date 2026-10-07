@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About | HealthAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav class="navbar">
+    <div class="nav-brand">🏥 HealthAI</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/assessment">Assessment</a></li>
+      <li><a href="/about" class="active">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Page Header ── -->
+  <div class="page-header">
+    <h1>About the Project</h1>
+    <p>AI Health Risk Prediction System — SDG 3</p>
+  </div>
+
+  <div class="container about-container">
+
+    <!-- ── Project Objective ── -->
+    <div class="card">
+      <h2 class="card-title">🎯 Project Objective</h2>
+      <p>
+        The <strong>AI Health Risk Prediction System</strong> is a beginner-friendly machine learning project
+        that uses basic health information to estimate a person's risk of developing common health conditions
+        such as cardiovascular disease or diabetes.
+      </p>
+      <p>
+        The primary goals are:
+      </p>
+      <ul class="about-list">
+        <li>Raise <strong>health awareness</strong> by giving people insight into their personal risk factors.</li>
+        <li>Demonstrate how <strong>machine learning</strong> can be applied to real-world healthcare data.</li>
+        <li>Support <strong>preventive healthcare</strong> by encouraging users to adopt healthier lifestyles.</li>
+        <li>Align with <strong>UN SDG 3 — Good Health and Well-Being</strong>.</li>
+      </ul>
+    </div>
+
+    <!-- ── Dataset ── -->
+    <div class="card">
+      <h2 class="card-title">📂 Dataset</h2>
+      <table class="about-table">
+        <tr><td><strong>Type</strong></td><td>Synthetic dataset based on UCI Heart Disease / Pima Diabetes patterns</td></tr>
+        <tr><td><strong>Records</strong></td><td>1,500 rows</td></tr>
+        <tr><td><strong>Features</strong></td><td>Age, Gender, BMI, Blood Pressure, Glucose, Cholesterol, Heart Rate, Smoking, Activity, Family History</td></tr>
+        <tr><td><strong>Target</strong></td><td>Binary — 0 (Low Risk) / 1 (High Risk)</td></tr>
+        <tr><td><strong>Train/Test Split</strong></td><td>80% training / 20% testing</td></tr>
+      </table>
+    </div>
+
+    <!-- ── ML Algorithm ── -->
+    <div class="card">
+      <h2 class="card-title">🤖 Machine Learning Approach</h2>
+      <p>Three classification models were trained and compared:</p>
+
+      <div class="algo-grid">
+        <div class="algo-card">
+          <h3>Logistic Regression</h3>
+          <p>
+            Estimates the <strong>probability</strong> that a person is at risk by finding the best
+            linear boundary between at-risk and not-at-risk groups.
+            Simple, fast, and easy to interpret.
+          </p>
+        </div>
+        <div class="algo-card">
+          <h3>Decision Tree</h3>
+          <p>
+            Splits data by asking yes/no questions (e.g., <em>"Is glucose &gt; 126?"</em>).
+            Easy to visualise and explain.
+          </p>
+        </div>
+        <div class="algo-card">
+          <h3>Random Forest</h3>
+          <p>
+            Builds many decision trees and takes a vote. Generally more accurate and
+            robust to noisy data.
+          </p>
+        </div>
+      </div>
+
+      <p style="margin-top:1rem;">
+        <strong>Selection:</strong> The model with the highest <strong>F1-Score</strong>
+        on the test set is automatically saved as the active model.
+      </p>
+    </div>
+
+    <!-- ── Model Performance ── -->
+    {% if metrics %}
+    <div class="card">
+      <h2 class="card-title">📊 Model Performance</h2>
+
+      <div class="metrics-highlight">
+        <div class="metric-box">
+          <span class="metric-value">{{ metrics.accuracy }}%</span>
+          <span class="metric-name">Accuracy</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-value">{{ metrics.precision }}%</span>
+          <span class="metric-name">Precision</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-value">{{ metrics.recall }}%</span>
+          <span class="metric-name">Recall</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-value">{{ metrics.f1 }}%</span>
+          <span class="metric-name">F1-Score</span>
+        </div>
+      </div>
+
+      <p class="muted" style="margin-top:0.5rem;">
+        Best performing model: <strong>{{ metrics.best_model }}</strong>
+      </p>
+
+      <!-- Model Comparison Chart -->
+      {% if metrics.all_models %}
+      <canvas id="modelCompareChart" height="120"></canvas>
+      {% endif %}
+
+      <!-- Confusion Matrix Image -->
+      <div style="text-align:center; margin-top:1.5rem;">
+        <h3 style="margin-bottom:0.5rem;">Confusion Matrix</h3>
+        <img src="{{ url_for('static', filename='confusion_matrix.png') }}"
+             alt="Confusion Matrix"
+             style="max-width:340px; width:100%; border:1px solid #e5e7eb; border-radius:8px;"/>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- ── How It Works (Plain English) ── -->
+    <div class="card">
+      <h2 class="card-title">🧠 How the Model Makes a Prediction</h2>
+      <div class="explainer-steps">
+        <div class="explainer-step">
+          <div class="step-num">1</div>
+          <div>
+            <strong>Training Phase</strong> — The model was shown 1,200 historical health records
+            where the outcome (at risk / not at risk) was already known.
+          </div>
+        </div>
+        <div class="explainer-step">
+          <div class="step-num">2</div>
+          <div>
+            <strong>Pattern Learning</strong> — It learned that certain combinations of values
+            (e.g., high blood pressure + high glucose + smoking) are associated with higher risk.
+          </div>
+        </div>
+        <div class="explainer-step">
+          <div class="step-num">3</div>
+          <div>
+            <strong>New Prediction</strong> — When a new user submits their data, the model
+            compares it to those learned patterns and outputs a <em>probability score</em> (0–1).
+          </div>
+        </div>
+        <div class="explainer-step">
+          <div class="step-num">4</div>
+          <div>
+            <strong>Risk Classification</strong> — Probability &lt; 35% → Low Risk;
+            35–65% → Medium Risk; &gt; 65% → High Risk.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SDG 3 Connection ── -->
+    <div class="card sdg-card">
+      <h2 class="card-title">🌍 Connection to SDG 3</h2>
+      <div class="sdg-grid">
+        <div>
+          <p>
+            <strong>UN Sustainable Development Goal 3</strong> targets: ensuring healthy lives and
+            promoting well-being for all at all ages, reducing premature mortality from non-communicable
+            diseases (NCDs) like cardiovascular disease and diabetes, and achieving universal health coverage.
+          </p>
+          <p>
+            This project supports SDG 3 by:
+          </p>
+          <ul class="about-list">
+            <li>Helping individuals understand their personal health risk factors.</li>
+            <li>Encouraging preventive action before disease develops.</li>
+            <li>Demonstrating how technology can democratise health awareness.</li>
+          </ul>
+        </div>
+        <div class="sdg-badge-large">🌿<br/>SDG 3<br/>Good Health &amp;<br/>Well-Being</div>
+      </div>
+    </div>
+
+    <!-- ── Disclaimer ── -->
+    <div class="disclaimer-box disclaimer-large">
+      <h3>⚠️ Medical Disclaimer</h3>
+      <p>
+        This system is developed for <strong>educational and awareness purposes only</strong>.
+        It does not provide medical diagnosis or replace professional medical advice.
+        The predictions are based on a simplified machine learning model trained on synthetic data
+        and may not accurately reflect your actual health status.
+      </p>
+      <p>
+        <strong>Please consult a qualified healthcare professional for any medical concerns.</strong>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <p>AI Health Risk Prediction System &nbsp;|&nbsp; SDG 3 — Good Health &amp; Well-Being</p>
+    <p class="footer-disclaimer">For educational and awareness purposes only.</p>
+  </footer>
+
+  {% if metrics and metrics.all_models %}
+  <script>
+    const allModels = {{ metrics.all_models | tojson }};
+    const modelNames   = Object.keys(allModels);
+    const accuracies   = modelNames.map(k => allModels[k].accuracy);
+    const f1scores     = modelNames.map(k => allModels[k].f1);
+
+    new Chart(document.getElementById('modelCompareChart'), {
+      type: 'bar',
+      data: {
+        labels: modelNames,
+        datasets: [
+          {
+            label: 'Accuracy (%)',
+            data: accuracies,
+            backgroundColor: 'rgba(59, 130, 212, 0.7)'
+          },
+          {
+            label: 'F1-Score (%)',
+            data: f1scores,
+            backgroundColor: 'rgba(124, 92, 216, 0.7)'
+          }
+        ]
+      },
+      options: {
+        plugins: { legend: { position: 'bottom' } },
+        scales: {
+          y: { beginAtZero: true, max: 100, title: { display: true, text: 'Score (%)' } }
+        }
+      }
+    });
+  </script>
+  {% endif %}
+
+</body>
+</html>

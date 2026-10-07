@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prediction Result | HealthAI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- ── Navigation ── -->
+  <nav class="navbar">
+    <div class="nav-brand">🏥 HealthAI</div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/assessment">Assessment</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </nav>
+
+  {% if error %}
+  <!-- ── Error State ── -->
+  <div class="container" style="margin-top:3rem;">
+    <div class="disclaimer-box" style="border-left-color:#dc3545;">
+      ❌ <strong>Error:</strong> {{ error }}
+      <br><br>
+      <a href="/assessment" class="btn btn-primary">← Try Again</a>
+    </div>
+  </div>
+
+  {% else %}
+  <!-- ── Risk Header ── -->
+  <div class="result-header {{ risk_class }}-header">
+    <div class="result-header-content">
+      <p class="result-label">Your Estimated Health Risk</p>
+      <h1 class="result-risk-level" style="color: {{ risk_color }}">{{ risk_label }}</h1>
+      <div class="probability-display">
+        <div class="prob-circle" style="--prob-color: {{ risk_color }}">
+          <span class="prob-number">{{ risk_prob }}%</span>
+          <span class="prob-text">Risk Probability</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Disclaimer ── -->
+  <div class="container">
+    <div class="disclaimer-box">
+      ⚠️ <strong>Important:</strong> This system is developed for educational and awareness purposes only.
+      It does not provide medical diagnosis or replace professional medical advice.
+      Please consult a qualified healthcare professional for medical concerns.
+    </div>
+  </div>
+
+  <div class="container result-grid">
+
+    <!-- ── Left Column ── -->
+    <div class="result-left">
+
+      <!-- BMI Card -->
+      <div class="card">
+        <h2 class="card-title">⚖️ BMI Analysis</h2>
+        <div class="bmi-result-row">
+          <div class="bmi-big-number">{{ bmi }}</div>
+          <div>
+            <div class="bmi-cat-badge
+              {% if bmi_category == 'Normal' %}badge-green
+              {% elif bmi_category == 'Underweight' %}badge-blue
+              {% elif bmi_category == 'Overweight' %}badge-yellow
+              {% else %}badge-red{% endif %}">
+              {{ bmi_category }}
+            </div>
+            <p class="muted">Height: {{ height }} cm &nbsp;|&nbsp; Weight: {{ weight }} kg</p>
+          </div>
+        </div>
+        <canvas id="bmiChart" height="80"></canvas>
+      </div>
+
+      <!-- Key Health Metrics Card -->
+      <div class="card">
+        <h2 class="card-title">📋 Your Health Metrics</h2>
+        <table class="metrics-table">
+          <tr><td>Age</td><td><strong>{{ age }} years</strong></td></tr>
+          <tr><td>Gender</td><td><strong>{{ gender }}</strong></td></tr>
+          <tr><td>Blood Pressure</td>
+              <td><strong>{{ blood_pressure }} mmHg</strong>
+                {% if blood_pressure >= 140 %}<span class="tag-red">High</span>
+                {% elif blood_pressure >= 130 %}<span class="tag-yellow">Elevated</span>
+                {% else %}<span class="tag-green">Normal</span>{% endif %}
+              </td></tr>
+          <tr><td>Blood Glucose</td>
+              <td><strong>{{ glucose }} mg/dL</strong>
+                {% if glucose >= 126 %}<span class="tag-red">High</span>
+                {% elif glucose >= 100 %}<span class="tag-yellow">Elevated</span>
+                {% else %}<span class="tag-green">Normal</span>{% endif %}
+              </td></tr>
+          <tr><td>Cholesterol</td>
+              <td><strong>{{ cholesterol }} mg/dL</strong>
+                {% if cholesterol >= 240 %}<span class="tag-red">High</span>
+                {% elif cholesterol >= 200 %}<span class="tag-yellow">Borderline</span>
+                {% else %}<span class="tag-green">Normal</span>{% endif %}
+              </td></tr>
+          <tr><td>Heart Rate</td><td><strong>{{ heart_rate }} bpm</strong></td></tr>
+          <tr><td>Smoking</td><td><strong>{{ smoking }}</strong></td></tr>
+          <tr><td>Activity Level</td><td><strong>{{ activity_label }}</strong></td></tr>
+          <tr><td>Family History</td><td><strong>{{ family_history }}</strong></td></tr>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ── Right Column ── -->
+    <div class="result-right">
+
+      <!-- Risk Probability Chart -->
+      <div class="card">
+        <h2 class="card-title">🎯 Risk Probability</h2>
+        <canvas id="riskChart" height="200"></canvas>
+      </div>
+
+      <!-- Health Indicators Chart -->
+      <div class="card">
+        <h2 class="card-title">📈 Health Indicators vs Normal</h2>
+        <canvas id="radarChart" height="250"></canvas>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Full-width: Recommendations ── -->
+  <div class="container">
+    <div class="card recommendations-card">
+      <h2 class="card-title">💡 Health Recommendations</h2>
+      <ul class="recommendations-list">
+        {% for tip in recommendations %}
+          <li>{{ tip }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── CTA Buttons ── -->
+  <div class="container result-actions">
+    <a href="/assessment" class="btn btn-primary">🔄 Take Assessment Again</a>
+    <a href="/" class="btn btn-secondary">🏠 Back to Home</a>
+  </div>
+
+  {% endif %}
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <p>AI Health Risk Prediction System &nbsp;|&nbsp; SDG 3 — Good Health &amp; Well-Being</p>
+    <p class="footer-disclaimer">For educational and awareness purposes only.</p>
+  </footer>
+
+  {% if not error %}
+  <script>
+    // ── Data from Flask ──
+    const riskProb   = {{ risk_prob }};
+    const lowProb    = {{ low_prob }};
+    const bmiValue   = {{ bmi }};
+    const bpValue    = {{ blood_pressure }};
+    const glucValue  = {{ glucose }};
+    const cholValue  = {{ cholesterol }};
+    const riskColor  = "{{ risk_color }}";
+
+    // ── 1. Risk Doughnut Chart ──
+    new Chart(document.getElementById('riskChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['At Risk', 'Low Risk'],
+        datasets: [{
+          data: [riskProb, lowProb],
+          backgroundColor: [riskColor, '#e9ecef'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ${ctx.label}: ${ctx.parsed}%`
+            }
+          }
+        },
+        cutout: '70%'
+      }
+    });
+
+    // ── 2. BMI Bar Chart ──
+    new Chart(document.getElementById('bmiChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Your BMI', 'Normal Max (25)', 'Obese Threshold (30)'],
+        datasets: [{
+          label: 'BMI',
+          data: [bmiValue, 25, 30],
+          backgroundColor: [
+            bmiValue < 18.5 ? '#17a2b8' : bmiValue < 25 ? '#28a745' :
+            bmiValue < 30   ? '#ffc107' : '#dc3545',
+            '#28a745', '#dc3545'
+          ]
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, max: 40 } }
+      }
+    });
+
+    // ── 3. Radar Chart (Health Indicators) ──
+    // Normalise each value to 0-100 scale for radar display
+    const normalize = (val, min, max) =>
+      Math.min(100, Math.max(0, ((val - min) / (max - min)) * 100));
+
+    new Chart(document.getElementById('radarChart'), {
+      type: 'radar',
+      data: {
+        labels: ['Blood Pressure', 'Glucose', 'Cholesterol', 'BMI', 'Heart Rate'],
+        datasets: [
+          {
+            label: 'Your Values',
+            data: [
+              normalize(bpValue,   80, 200),
+              normalize(glucValue, 60, 300),
+              normalize(cholValue, 100, 400),
+              normalize(bmiValue,  15, 45),
+              normalize({{ heart_rate }}, 40, 130)
+            ],
+            backgroundColor: 'rgba(59, 130, 212, 0.2)',
+            borderColor: '#3b82d4',
+            pointBackgroundColor: '#3b82d4'
+          },
+          {
+            label: 'Normal Range',
+            data: [
+              normalize(120, 80, 200),   // Normal BP
+              normalize(95,  60, 300),   // Normal Glucose
+              normalize(180, 100, 400),  // Normal Cholesterol
+              normalize(22,  15, 45),    // Normal BMI
+              normalize(72,  40, 130)    // Normal HR
+            ],
+            backgroundColor: 'rgba(40, 167, 69, 0.15)',
+            borderColor: '#28a745',
+            pointBackgroundColor: '#28a745',
+            borderDash: [5, 5]
+          }
+        ]
+      },
+      options: {
+        scales: {
+          r: {
+            beginAtZero: true,
+            max: 100,
+            ticks: { stepSize: 25 }
+          }
+        },
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  </script>
+  {% endif %}
+
+</body>
+</html>
