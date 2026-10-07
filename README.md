@@ -1,6 +1,8 @@
 # 🏥 AI Health Risk Prediction System
 ### Aligned with UN SDG 3 — Good Health & Well-Being
 
+link - https://ai-health-prediction-5hmv.onrender.com
+
 > **Disclaimer:** This project is for **educational and awareness purposes only**.  
 > It does not provide medical diagnosis or replace professional medical advice.
 
